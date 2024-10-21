@@ -1,0 +1,37 @@
+# This file was generated from `meta.yml`, please do not edit manually.
+# Follow the instructions on https://github.com/coq-community/templates to regenerate.
+
+opam-version: "2.0"
+maintainer: "Cyril Cohen <cyril.cohen@inria.fr>"
+version: "dev"
+
+homepage: "https://github.com/CohenCyril/M2MA_mathcomp"
+dev-repo: "git+https://github.com/CohenCyril/M2MA_mathcomp.git"
+bug-reports: "https://github.com/CohenCyril/M2MA_mathcomp/issues"
+license: "LGPL-2.1-or-later"
+
+synopsis: "Mathcomp lectures for M2MA"
+description: """
+Mathcomp lectures for M2MA"""
+
+build: [make "-j%{jobs}%"]
+install: [make "install"]
+depends: [
+  "coq" {>= "8.18" & < "8.21"}
+  "coq-mathcomp-character" {= "2.2.0"}
+  "coq-mathcomp-algebra-tactics" {= "1.2.3"}
+  "coq-mathcomp-zify" {= "1.5.0+2.0+8.16"}
+  "coq-mathcomp-analysis" {= "1.5.0"}
+]
+
+tags: [
+  "category:Computer Science"
+  "category:Miscellaneous/Coq Extensions"
+  "keyword:tutorial"
+  "keyword:ssreflect"
+  "keyword:mathcomp"
+  "logpath:M2MA"
+]
+authors: [
+  "Cyril Cohen"
+]

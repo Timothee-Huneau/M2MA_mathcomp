@@ -1,0 +1,3 @@
+#!/usr/bin/env bash
+
+tred $1 | xdot -
