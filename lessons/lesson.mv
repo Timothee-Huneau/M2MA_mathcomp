@@ -189,7 +189,7 @@ Add Search Blacklist "__canonical__" "__to__" "HB_unamed_mixin". (* HB bug #418 
 Search addn muln.
 Search (_ * _.+1) inside ssrnat.
 Search "add" "M".
-Search "Gauss".
+Search "Gauss" coprimez headconcl:(_ = _).
 ```
 
 ---
@@ -277,8 +277,7 @@ Lemma goal_model_example (ci : Ti) (dj : Tj := ej) (Fk : Pk ci) :
   forall (xl : Tl), Pn xl -> Conclusion ci dj xl.
 Proof.
 move=> xl pnxl.
-Fail move: xl.
-move: ci Fk.
+move: ci {Fk}.
 Abort.
 End GoalModel.
 End GoalModel.
@@ -299,21 +298,17 @@ End GoalModel.
 Module ArgumentsToTactics.
 
 Lemma negb_and : forall b c, ~~ (b && c) = ~~ b || ~~ c.
-Proof.
-move=> b. move=> c. move: b. move: c.
-by case; case.
-Restart.
-move=> c b. move: b c.
-Restart.
-move=> b; case: b; move=> c; case: c.
-Restart.
+Proof. by move=> [] []. Restart.
 by case; case.
 Qed.
 
 Lemma test_modus_ponens P Q (toto : Prop) : P -> (P -> Q) -> Q.
 Proof.
-move=> p H.
-apply H. (* equivalent to `move=> pq; apply: pq` *)
+move=> p.
+apply.
+
+
+(* equivalent to `move=> pq; apply: pq` *)
 by []. (* or simply `exact` instead of `by apply`. *)
 Qed.
 
@@ -411,13 +406,8 @@ Let's use these lemmas (or not):
 - no need to mention lemmas proved by computation
 
 ```coq
-Lemma leqnn n : (n <= n) = true.
-Proof.
-elim: n => [|n IHn].
-  by [].
-rewrite leqSS.
-by apply: IHn.
-Qed.
+Lemma leqnn n : (n <= n).
+Proof. by elim: n. Qed.
 ```
 
 ---
@@ -499,13 +489,13 @@ Proof. rewrite /is_true. by []. Qed.
 - `=> ->` (on the fly rewrite, "subst")
 - notation `.*2`
 
+
 ```coq
-Lemma test_eqP n m : n == m -> n.+1 + m.+1 = m.+1.*2.
+From mathcomp Require Import zify.
+
+Lemma test_eqP (n m : nat) : n == m -> n.+1 + m.+1 = m.+1.*2.
 Proof.
-move=> /eqP.
-move=> ->.
-rewrite addnn.
-by [].
+by move=> /eqP->; lia.
 Qed.
 ```
 
@@ -537,9 +527,8 @@ Qed.
 ```coq
 Lemma test_leqW i j k : (i <= k) && (k.+1 <= j) -> i <= j.+1.
 Proof.
-(* move=> /andP. case. move=> /leqW. move=> leq_ik1. *)
-move=> /andP[/leqW leq_ik1 /leqW leq_k1j1].
-exact: leq_trans leq_ik1 leq_k1j1.
+move=> /andP[/leqW leq_ik1 /leqW]; apply: leq_trans.
+by [].
 Qed.
 ```
 
