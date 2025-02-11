@@ -126,9 +126,5 @@
         "htmldoc/depend": true,
         "htmldoc/depend.js": true,
         "htmldoc/*.css": true
-    },
-    "cSpell.language": "fr,en-GB",
-    "cSpell.enabledFileTypes": {
-        "markdown": false
     }
 }
