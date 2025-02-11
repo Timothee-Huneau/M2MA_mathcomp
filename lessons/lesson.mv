@@ -25,7 +25,10 @@ height: 1250
   }
   .reveal ol {
     display: block;
-  }  
+  }
+  .reveal code {
+    background-color: black;
+  }
 </style>
 
 ## Intro
@@ -544,7 +547,7 @@ Qed.
 
 ### The reflect predicate
 `reflect P b` is the preferred way to state that the predicate `P` (in `Prop`)
-  is logically equivalent to [b = true]
+  is logically equivalent to `b = true`.
 
 ```coq
 Module reflect_for_eqP.
