@@ -126,5 +126,6 @@
         "htmldoc/depend": true,
         "htmldoc/depend.js": true,
         "htmldoc/*.css": true
-    }
+    },
+    "coq-lsp.check_only_on_request": true
 }

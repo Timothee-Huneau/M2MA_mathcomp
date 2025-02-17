@@ -20,14 +20,24 @@ Proof. by case: p; case: q. Qed.
    - prove that as you like
 *)
 Lemma Pierce p q : ((p ==> q) ==> p) ==> p.
-Proof. Admitted.
+Proof.
+  case: p.
+  - case: q.
+    * done.
+    * done.
+  - done.
+Qed.
 
 (**
 ** Exercise 3:
     - look for lemmas supporting contrapositive reasoning
 *)
 Lemma bool_gimmics1 i : i != i.-1 -> i != 0.
-Proof. Admitted.
+Proof.
+  apply /implyP.  
+  rewrite Bool.implb_contrapositive.
+  by case: i.
+Qed.
 
 (**
 ** Exercise 4:
@@ -36,15 +46,28 @@ Proof. Admitted.
     - now find another proof without the view
 *)
 Lemma find_me p q :  (~~ p) = q -> p (+) q.
-Proof. Admitted.
+Proof.
+  rewrite -negb_eqb.
+  move=>/eqP.
+  apply /implyP.
+  by case: p; case: q.
+Qed.
 
 (**
 ** Exercise 5:
    - it helps to find out what is behind [./2] and [.*2] in order to [Search]
    - any proof would do, but there is one not using [implyP]
 *)
+Locate "->".
+Search "implb".
+(* Je ne suis pas sûr de comprendre ce que `true -> P` avec `P : Prop` signifie,
+encore moins en mesure de l'utiliser. *)
 Lemma view_gimmics1 p a b : p -> (p ==> (a == b.*2)) -> a./2 = b.
-Proof. Admitted.
+Proof.
+case: p.
+* admit.
+* by [].
+Admitted.
 
 (**
 ** Exercise 6:
@@ -53,15 +76,19 @@ Proof. Admitted.
 *)
 Lemma bool_gimmics2 p q r : ~~ p && (r == q) -> q ==> (p || r).
 Proof.
-Admitted.
+  apply /implyP.
+  by case: p; case q; case r.
+Qed.
 
 (**
 ** Exercise 7:
     - look up the definition of [iter]
     - prove this statement by induction
 *)
+Print iter.
 Lemma iterSr A n (f : A -> A) x : iter n.+1 f x = iter n f (f x).
 Proof.
+  
 Admitted.
 
 (**
@@ -87,7 +114,9 @@ Proof. Admitted.
 >>
 *)
 Lemma ltn_neqAle m n : (m < n) = (m != n) && (m <= n).
-Proof. Admitted.
+Proof.
+  rewrite eqn.
+Admitted.
 
 (**
 ** Exercise 10:
