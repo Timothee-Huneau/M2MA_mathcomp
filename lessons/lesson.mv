@@ -1192,7 +1192,7 @@ About row_subP.
 About submxMl.
 ```
 
- - $\mathrm{Im} A$ is represented by the square matrix `kermx A`.
+ - $\mathrm{Ker} A$ is represented by the square matrix `kermx A`.
 
 ```coq
 About kermx.

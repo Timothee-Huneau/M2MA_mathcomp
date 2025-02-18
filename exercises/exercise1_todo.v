@@ -21,11 +21,13 @@ Proof. by case: p; case: q. Qed.
 *)
 Lemma Pierce p q : ((p ==> q) ==> p) ==> p.
 Proof.
-  case: p.
-  - case: q.
-    * done.
-    * done.
-  - done.
+  apply /implyP.
+  move=> /implyP H.
+  apply: (H).
+  (* we're trying to prove constructively something
+  that isn't contructively provable. Oops! *)
+  Restart.
+  by case: p; case q.
 Qed.
 
 (**
@@ -34,7 +36,15 @@ Qed.
 *)
 Lemma bool_gimmics1 i : i != i.-1 -> i != 0.
 Proof.
-  apply /implyP.  
+  case: (eqVneq i 0).
+  move=> ->.
+  by apply /implyP.
+  done.
+  Restart.
+  Print contra_neq.
+  by apply /contra_neq => ->.
+  Restart.
+  apply /implyP.
   rewrite Bool.implb_contrapositive.
   by case: i.
 Qed.
@@ -47,10 +57,16 @@ Qed.
 *)
 Lemma find_me p q :  (~~ p) = q -> p (+) q.
 Proof.
+  move=> /addbP.
+  apply.
+  Restart.
   rewrite -negb_eqb.
   move=>/eqP.
   apply /implyP.
   by case: p; case: q.
+  Restart.
+  by case: p; case: q.
+
 Qed.
 
 (**
@@ -58,26 +74,37 @@ Qed.
    - it helps to find out what is behind [./2] and [.*2] in order to [Search]
    - any proof would do, but there is one not using [implyP]
 *)
-Locate "->".
-Search "implb".
-(* Je ne suis pas sûr de comprendre ce que `true -> P` avec `P : Prop` signifie,
-encore moins en mesure de l'utiliser. *)
+Print doubleK.
+Print half_double.
 Lemma view_gimmics1 p a b : p -> (p ==> (a == b.*2)) -> a./2 = b.
 Proof.
-case: p.
-* admit.
-* by [].
-Admitted.
+  move=> -> /= /eqP ->. 
+  apply half_double.
+  Restart.
+  case: p.
+  - move=> _.
+    rewrite implyTb.
+    move=> /eqP ->.
+    apply half_double.
+  - by [].
+Qed.
 
 (**
 ** Exercise 6:
     - prove that using [case:]
     - then prove that without using case:
 *)
+Search (_ == _) "eqb".
 Lemma bool_gimmics2 p q r : ~~ p && (r == q) -> q ==> (p || r).
 Proof.
-  apply /implyP.
-  by case: p; case q; case r.
+  move=> /andP [] /negPf -> /= /eqP ->.
+  by apply /implyP.
+  Restart.
+  move=> /andP [_ /eqP ->].
+  apply /implyP => ->.
+  apply orbT.
+  Restart.
+  by case: p; case: q; case: r.
 Qed.
 
 (**
@@ -88,8 +115,8 @@ Qed.
 Print iter.
 Lemma iterSr A n (f : A -> A) x : iter n.+1 f x = iter n f (f x).
 Proof.
-  
-Admitted.
+  by elim: n => [//| n /= <- /=].
+Qed.
 
 (**
 ** Exercise 8:
@@ -97,8 +124,13 @@ Admitted.
       during recursion)
     - prove the following statement by induction
 *)
+Print subnS.
 Lemma iter_predn m n : iter n predn m = m - n.
-Proof. Admitted.
+Proof.
+  elim: n => [ /= | n /= ->].
+  by rewrite subn0.
+  by rewrite subnS.
+Qed.
 
 (**
 ** Exercise 9:
