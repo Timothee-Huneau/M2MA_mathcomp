@@ -972,7 +972,7 @@ have <pre>(A complicated matrix) i j</pre>
 
 in your goal.
 
-```
+```coq
 Check mxE.
 ```
 
@@ -985,7 +985,7 @@ Check mxE.
 matrices are equal if and only if all their coefficients are pairwise
 equal.
 
-```
+```coq
 Check matrixP.
 ```
 
